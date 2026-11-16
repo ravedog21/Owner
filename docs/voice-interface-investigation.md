@@ -1,6 +1,6 @@
 # Hands-free voice ("Jarvis") for Claude Code: investigation
 
-Date: 2026-11-16. Written from a Claude Code **cloud** session (started from the Fold). This session can't open
+Date: 2026-11-16. Vocci facts were read through the Apify web-fetch connector (a few metered calls on your Apify account), because this sandbox blocks vocci.ai. Written from a Claude Code **cloud** session (started from the Fold). This session can't open
 files on the MacBook. Everything below about the Mac comes from the Kosmos board, the Appolis connector, and
 the Remote Control session list. Each claim is marked **VERIFIED** (seen in this session), **DOCUMENTED** (in
 the Claude Code docs, not tested here) or **UNVERIFIED**.
@@ -145,10 +145,29 @@ See §7 for what the ring can and can't do. The routing design doesn't depend on
 
 ---
 
-## 7. Vocci ring: see the chat reply for the verified findings
+## 7. Vocci ring: verified from vendor docs (docs.vocci.ai, support.vocci.ai, vocci.ai)
 
-(Filled in from the vendor-docs research; anything not confirmed is listed as unverified. **Don't buy it for
-live two-way voice until the vendor confirms a live-audio or button API.**)
+| Question | Answer | Source |
+|---|---|---|
+| Double-tap? | Yes, but it's fixed: **double-click = start/stop recording**. Single click = highlight. Long-press = "Voice Demand" to Vocci's own AI (max 60 s) | support article 15754703436047 |
+| Remap the button / expose it to your app? | **Not documented anywhere.** No SDK, MCP or webhook for button events | docs + support |
+| Live mic for a two-way conversation? | **No.** No headset/HFP/LE-Audio mode. It records to the ring, then syncs over BLE to the Vocci app only | docs, specs |
+| Speaker / feedback | No speaker. Haptics (1 pulse start, 2 stop, 3 error) and an LED. Haptics can't be controlled from outside | support |
+| MCP for Claude Code | Yes: `claude mcp add --transport http vocci https://mcp.vocci.ai/mcp` (OAuth). Read-only search/fetch of transcripts, summaries, audio links, plus to-do create/complete. **Nothing real-time** | docs.vocci.ai/developers/mcp |
+| Webhook | `session.completed` (transcript + summary Markdown, ≤1 MB, HMAC-signed) and `audio.uploaded`. Public HTTPS, answer in 5 s, retries for 24 h. **Ring voice-command (long-press) recordings don't send `audio.uploaded`**. Unclear whether they send `session.completed` | docs.vocci.ai/developers/webhooks |
+| Latency | Not published. It's after phone sync + upload + transcription (~1 min per 15 min of audio). Auto-upload and auto-transcription are **off by default** | support |
+| Android / Fold | Android app on Google Play (v1.1.39). **Fold not stated.** One phone at a time | Play, support |
+| Price | $249 sale / $299 list. Free plan: 300 transcription min/month. MCP + webhooks on every plan | product page |
+
+**Verdict:** fine for the **"task for later"** path (double-tap → speak "Claude task: Hockey Lab — …" →
+double-tap → webhook). **Not usable for the live conversation.** For live, the trigger is a separate
+programmable button and the mic/speaker are your headphones:
+- **Flic 2** button: click/double-click/hold, an official Android SDK, and it can launch apps or a call. Strongest
+  option.
+- A Bluetooth media-key ring plus the Key Mapper app (only if the ring sends real key codes; reportedly stops
+  with the screen off).
+- Your headphones' own call/assistant button (redial "Jarvis").
+- Galaxy Ring double-pinch: **not** remappable (photo/alarm only).
 
 ---
 
