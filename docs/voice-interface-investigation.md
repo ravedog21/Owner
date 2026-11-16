@@ -189,3 +189,30 @@ Target: **"HockeyLab Player Card Design"** (connected, idle).
 What is custom development: the router, the ElevenLabs agent tools, the project → session name matching, the
 Vocci webhook receiver, and a Mac Stop hook that captures `In plain terms` (a port of speak-summary's capture,
 without the Windows parts).
+
+---
+
+## 9. First test results (2026-11-16)
+
+**Step 1: send to an existing desktop session: PASSED.**
+- The first try was refused: a cloud session needs the owner's trust approval to message sessions on the owner's own
+  computer. Raven approved it in person on a trusted device. That is permanent for this session and limits it to
+  Raven's trusted devices.
+- 16:02 UTC: message delivered to "HockeyLab Player Card Design". It replied in about 30 seconds, read-only, with its
+  context intact, and ended with its usual **In plain terms** section. I read the reply with `list_events`.
+- Its reply: Hockey Lab works only while the Mac is awake and plugged in. The Nov 12 goalie fix still needs one real
+  game night. The Cloudflare move (so it runs without the laptop) is waiting on Raven's go-ahead, his decisions in the
+  plan, and installing Colima. Nothing saved to git since Oct 31.
+- Quirk: the session's attempt to message back into this cloud session failed ("session not found"), so replies are
+  collected by reading its events. That's fine for the router.
+- The Hockey session's memory is now about 338k of 400k.
+
+**Step 2: voice test agent: BUILT.**
+- ElevenLabs agent "Jarvis test (Claude Code voice)", id `agent_1201m7jhnmjmes6t8zy1t7s4szzb`, tag `jarvis-test`.
+- Voice "Nathaniel – Natural, Stylish Assistant" (British, dry wit). The thinking runs on **claude-haiku-5-5**
+  (verified: ElevenLabs offers Claude Haiku 5.5 and Sonnet 5.5). Timezone America/New_York.
+- Its knowledge is a static briefing taken from the sessions' plain-terms summaries, including the step 1 reply.
+  It has no live tools yet: it repeats instructions back and says they are passed on after the call.
+- What to judge: how fast it starts talking, whether it can be interrupted, and whether it feels like a person.
+- What's next: the router (live status tool plus a send-instruction tool) so Jarvis reads fresh `In plain terms`
+  sections instead of a snapshot.
